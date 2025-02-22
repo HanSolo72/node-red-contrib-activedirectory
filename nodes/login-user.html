@@ -1,0 +1,81 @@
+<script type="text/javascript">
+    RED.nodes.registerType('login-user', {
+      category: 'Active Directory',
+      color: '#0E9EFF',
+      defaults: {
+        name: {
+          value: ""
+        },
+        configName: {
+          value: "",
+          type: "ad-config"
+        }
+      },
+      inputs: 1,
+      outputs: 2,  // Zwei Ausgänge: Erfolg (1) und Fehler (2)
+      outputLabels: ["success", "failure"],  // Beschriftung der Ausgänge
+      icon: "bridge.png",
+      label: function () {
+        return this.name || "login user";
+      }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="login-user">
+  <hr>
+  <h4>Node Configuration</h4>
+  <hr>
+  <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+
+  <hr>
+  <h5>Active Directory</h5>
+  <hr>
+  <div class="form-row">
+    <label>ConfigName</label>
+    <input type="text" id="node-input-configName">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="login-user">
+  <p>Connects to a Microsoft Active Directory and authenticates a user based on the username and password provided in <code>msg.payload</code>.</p>
+
+  <h3>Inputs</h3>
+    <dl class="message-properties">
+      <dt>payload
+        <span class="property-type">JSON object</span>
+      </dt>
+      <dd> An object containing <code>username</code> and <code>password</code> for authentication. Example: <code>{ "username": "user@domain.com", "password": "password" }</code>. sAMAccountName is also possible as username.</dd>
+    </dl>
+    <dl class="message-properties">
+      <dt>tlsOptions <i>(optional)</i>
+        <span class="property-type">JSON object</span>
+      </dt>
+      <dd>
+        <p>Additional options passed to TLS connection layer when connecting via <code>ldaps://</code>. (See: <a target="_blank" href="https://nodejs.org/api/tls.html#tls_tls_connect_options_callback">TLS docs for node.js</a>)</p>
+      </dd>
+    </dl>
+
+  <h3>Outputs</h3>
+     <ol class="node-ports">
+         <li>Success (authenticated)
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">JSON object</span></dt>
+                 <dd>A JSON object indicating successful authentication: <code>{ "authenticated": true, "username": "user@domain.com" }</code>.</dd>
+             </dl>
+         </li>
+         <li>Failure (not authenticated or error)
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">JSON object | string</span></dt>
+                 <dd>If authentication fails: <code>{ "authenticated": false, "username": "user@domain.com" }</code>. If an error occurs: an error message.</dd>
+             </dl>
+         </li>
+     </ol>
+
+  <h3>References</h3>
+    <ul>
+        <li><a href="https://github.com/NoeSamaille/node-red-contrib-activedirectory">GitHub</a> - the original node's GitHub repository</li>
+    </ul>
+</script>
