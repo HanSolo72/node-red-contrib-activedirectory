@@ -41,6 +41,7 @@ Documentation
 + [Connection](#connection)
 + [findUser](#finduser)
 + [findGroup](#findgroup)
++ [loginUser](#loginuser)
 + [query](#query)
 + [examples](https://github.com/NoeSamaille/node-red-contrib-activedirectory/wiki/Examples)
 
@@ -122,6 +123,28 @@ __Inputs__
 __Outputs__
 
 + `msg.payload` {JSON Object}: the standard output of the command, a JSON object that contains all the information about the group.
+
+<a id="loginuser"></a>
+### loginUser
+
+![image of node loginuser](images/node_loginuser.png)
+
+Connects to a Microsoft Active Directory and authenticates the user corresponding to the username (UPN or sAMAccountName) and password set in `msg.payload`.
+
+__Inputs__
+
++ `msg.payload.username` {string}: the AD username (UPN or sAMAccountName).
++ `msg.payload.password` {string}: the password.
+
++ `msg.tlsOptions` {JSON Object}: (Optional) Additional options passed to TLS connection layer when connecting via ldaps://. (See: [TLS docs for node.js](https://nodejs.org/api/tls.html#tls_tls_connect_options_callback)).
+
+__Outputs__
+
+__1. Success (authenticated)__
+A JSON object indicating successful authentication: <code>{ "authenticated": true, "username": "user@domain.com" }</code>.
+
+__2. Failure (not authenticated or error)__
+If authentication fails: <code>{ "authenticated": false, "username": "user@domain.com" }</code>. If an error occurs: an error message.
 
 <a id="query"></a>
 ### query
